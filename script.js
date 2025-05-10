@@ -1,39 +1,61 @@
-const apiKey = '66e7b1c7d5daa8985113241bc8ee36c2'; // Replace with your actual OpenWeatherMap API key
+const apiKey = '9505fd1df737e20152fbd78cdb289b6a';
+const cityInput = document.getElementById('cityInput');
+const searchButton = document.getElementById('searchButton');
+const city = document.getElementById('city');
+const temp = document.getElementById('temp');
+const weatherIcon = document.getElementById('weatherIcon');
+const condition = document.getElementById('condition');
+const wind = document.getElementById('wind');
+const humidity = document.getElementById('humidity');
+const pressure = document.getElementById('pressure');
+const date = document.getElementById('date');
 
-async function getWeather() {
-    const input = document.getElementById('city').value;
-    if (!input) {
-        alert('Please enter a city or pin code');
-        return;
-    }
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // Determine if input is a pin code (numeric) or city name
-    const isPinCode = /^\d+$/.test(input);
-    let url = '';
+function updateDate() {
+    const today = new Date();
+    const day = days[today.getDay()];
+    const month = months[today.getMonth()];
+    const date_num = today.getDate();
+    date.textContent = `${day}, ${date_num} ${month}`;
+}
 
-    if (isPinCode) {
-        // If input is a pin code, use the pin code endpoint
-        url = `https://api.openweathermap.org/data/2.5/weather?zip=${input}&appid=${apiKey}&units=metric`;
-    } else {
-        // Otherwise, treat input as a city name
-        url = `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${apiKey}&units=metric`;
-    }
-
+async function getWeather(city) {
     try {
-        const response = await fetch(url);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`);
+        if (!response.ok) throw new Error('City not found');
+
         const data = await response.json();
-
-        if (data.cod === '404') {
-            alert('Location not found');
-            return;
-        }
-
-        document.getElementById('city-name').innerText = `Weather in ${data.name}`;
-        document.getElementById('temperature').innerText = `Temperature: ${data.main.temp}°C`;
-        document.getElementById('description').innerText = `Description: ${data.weather[0].description}`;
-        document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
+        updateWeather(data);
     } catch (error) {
-        console.error('Error fetching weather data:', error);
-        alert('Error fetching weather data');
+        alert('Please enter a valid city name');
     }
 }
+
+function updateWeather(data) {
+    city.textContent = `${data.name}, ${data.sys.country}`;
+    temp.textContent = `${Math.round(data.main.temp)}°C`;
+    condition.textContent = data.weather[0].description.charAt(0).toUpperCase() + 
+                          data.weather[0].description.slice(1);
+    weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+    humidity.textContent = data.main.humidity;
+    wind.textContent = data.wind.speed;
+    pressure.textContent = data.main.pressure;
+}
+
+searchButton.addEventListener('click', () => {
+    const cityName = cityInput.value.trim();
+    if (cityName) getWeather(cityName);
+});
+
+cityInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const cityName = cityInput.value.trim();
+        if (cityName) getWeather(cityName);
+    }
+});
+
+// Initialize
+updateDate();
+getWeather('New York');
