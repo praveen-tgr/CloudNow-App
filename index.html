@@ -3,28 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Now App</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+    <title>Modern Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Forecast Friend</h1>
-        <input type="text" id="city" placeholder="Enter city name or pin code">
-        <button onclick="getWeather()">Get Weather</button>
-        
-        <div id="weather">
-            <h2 id="city-name"></h2>
-            <p id="temperature"></p>
-            <p id="description"></p>
-            <p id="humidity"></p>
+        <div class="weather-box">
+            <div class="search-box">
+                <input type="text" id="cityInput" placeholder="Enter city name...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="weather-info" id="weatherInfo">
+                <div class="location">
+                    <h2 id="city">New York, US</h2>
+                    <div class="date" id="date">Monday, 12 June</div>
+                </div>
+                <div class="temperature">
+                    <h1 id="temp">25°C</h1>
+                    <div class="weather-condition">
+                        <img id="weatherIcon" src="" alt="Weather Icon">
+                        <span id="condition">Clear Sky</span>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail">
+                        <i class="fas fa-wind"></i>
+                        <div>
+                            <span id="wind">5.14</span>
+                            <p>Wind Speed (m/s)</p>
+                        </div>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-tint"></i>
+                        <div>
+                            <span id="humidity">56</span>
+                            <p>Humidity (%)</p>
+                        </div>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-temperature-high"></i>
+                        <div>
+                            <span id="pressure">1012</span>
+                            <p>Pressure (hPa)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Note for users in a separate box -->
-    <p class="note">
-        <strong>Note:</strong> To get more precise results, enter the city's name followed by a comma and the 2-letter country code. For example, <em>London, GB</em> or <em>New York, US</em>. You can also use the pin code for searching.
-    </p>
-
-    <script src="script.js"></script> <!-- Link to the JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>
